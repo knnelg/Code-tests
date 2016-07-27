@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Factorial test</title>
+</head>
+
+<body>
+
+    <h2>Factorial test (See console)</h2>
+
+<script>
+
+
+
+// you can write to stdout for debugging purposes, e.g.
+// console.log('this is a debug message');
+
+function solution(A, K) {
+    "use strict";
+    for(var index = 0; index < K; index++) {
+        let lastItem = A.splice((A.length - 1), 1); 
+        A = lastItem.concat(A);
+    }
+    
+    return A;
+}        
+
+
+console.log("[1,2,3,4,5,6,7,8,9], 4 returns: " + solution([1,2,3,4,5,6,7,8,9], 4));
+
+
+</script>
+
+</body>
+
+</html>

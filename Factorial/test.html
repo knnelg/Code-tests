@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Factorial test</title>
+</head>
+
+<body>
+
+    <h2>Factorial test (See console)</h2>
+
+    <script>
+        var gtemp = null;           
+        // And here is the recursive function
+        function countSheep(number) {
+            var tempnum = number;
+            
+            if(tempnum === 0) {
+
+                console.log("Zzzzzz");
+    
+                gtemp = "sleep";
+            
+                return;
+    
+            }
+  
+            else {
+                console.log("Another sheep jumps over the fence.");
+                
+                // Define the variable newNumber as 
+                // 1 less than the input variable number
+                newNumber = number - 1; 
+            
+                // Recursively call the function
+                // with newNumber as the parameter
+                countSheep(newNumber);
+            }
+        }
+
+        // Call your new recursive function:
+        countSheep(4);
+        console.log(gtemp);
+        
+    
+    </script>
+
+</body>
+
+</html>

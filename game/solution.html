@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>title</title>
+    </head>
+    
+    <body>
+  
+    <h2>Game test (See console)</h2>
+  
+        <script>
+            var test1 = [4, 5, 3, 7, 2]; // should return '1,2'
+            
+            console.log("Test1 returned: " + solution(test1));
+            
+            ////////////////////////////////////////////////////////////////////
+            //
+            ////////////////////////////////////////////////////////////////////
+            function solution(A) {
+                // write your code in JavaScript (Node.js 4.0.0)
+                var result = "NO SOLUTION";
+                
+                // Get list of available slices that can be removed
+                var availableSlices = getSlices(A);
+                
+                console.log("Supplied array is: " + A);
+                console.log("Available slices are: " + availableSlices.toString());
+                
+                // Work out how to analyse all the relevant permutations???
+                // Play alternate turns untill exhausted, or receive 'no solution'
+                console.log(removeSlice(A, availableSlices[0][0], availableSlices[0][1]));
+                return result;
+
+                //////////////////////////////////////////////////////////////////////////////////////
+                // return array of valid slices
+                //////////////////////////////////////////////////////////////////////////////////////
+                function getSlices(A) {
+                    var result = [];
+                    
+                    for(base = 0; base < (A.length); ++base) {
+                        // Iterate over all positions from 'base' to end of array looking for all ranges that are valid slices
+                        for(var position = base; position < A.length; ++ position) {
+                            // if the current range is a valid slice, record it
+                            if(isValidSlice(A, base, position) === true) {
+                                result.push([base, position]);
+                            }
+                            
+                        }
+                    }
+                    
+                    return result;
+                }
+                
+                ///////////////////////////////////////////////////////////////////////////////////////////////
+                // Return true if the specified range of elements in the supplied array sum up to an even number
+                // Assumes array elements are integers and 'from' & 'to' are in correct order and within range
+                // of the array boundaries
+                ///////////////////////////////////////////////////////////////////////////////////////////////
+                function isValidSlice(A, from, to) {
+                    var result = false;
+                    var runningTotal = 0;
+                    
+                    for(var pointer = from; pointer <= to; ++pointer) {
+                        runningTotal += A[pointer];   
+                    }
+                    
+                    if(runningTotal % 2 === 0) {
+                        result = true;
+                    }
+                    
+                    return result;
+                }
+                
+                ///////////////////////////////////////////////////////////////////////////////////////////////
+                // Return supplied array with required slice removed
+                // Assumes array elements are integers and 'from' & 'to' are in correct order and within range
+                // of the array boundaries
+                ///////////////////////////////////////////////////////////////////////////////////////////////
+                function removeSlice(A, from, to) {
+                    var size = 1
+                    
+                    if(to <= from) {
+                        size = 1;
+                    }
+                    
+                    else {
+                        size = to - from;
+                    }
+                    
+                    var temp = A;
+                    temp.splice(from, size);
+                    
+                    return temp;
+                }
+                
+            } // End function solution()
+        </script>
+  
+    </body>
+</html>
