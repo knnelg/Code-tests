@@ -9,48 +9,252 @@
   
         <h2>Pyramid Slide Down from Codewars site (See console)</h2>
 
+        <h2>Pyramid Slide Down from Codewars site (See console)</h2>
+
         <p>Pyramids are amazing! Both in architectural and mathematical sense.
             If you have a computer, you can mess with pyramids even if you are
             not in Egypt at the time. For example, let's consider the
             following problem. Imagine that you have a plane pyramid built of
             numbers, like this one here:<p>
 
-            <p>/3/<br />
+        <p>/3/<br />
             \7\ 4 <br />
             2 \4\ 6 <br />
-            8 5 \9\ 3<br />
-            Here comes the task...</p>
+            8 5 \9\ 3</p>
 
-            <p>Let's say that the 'slide down' is a sum of consecutive numbers
-                from the top to the bottom of the pyramid. As you can see, the
-                longest 'slide down' is 3 + 7 + 4 + 9 = 23</p>
 
-            <p>Your task is to write a function longestSlideDown (in ruby:
-                longest_slide_down) that takes a pyramid representation as
-                argument and returns its' longest 'slide down'. For example,</p>
+        <p>Here comes the task...</p>
 
-            <p>By the way...</p>
+        <p>Let's say that the 'slide down' is a sum of consecutive numbers
+            from the top to the bottom of the pyramid. As you can see, the
+            longest 'slide down' is 3 + 7 + 4 + 9 = 23</p>
 
-            <p>My tests include some extraordinarily high pyramides so as you
-                can guess, brute-force method is a bad idea unless you have a
-                few centuries to waste. You must come up with something more
-                clever than that.</p>
+        <p>Your task is to write a function longestSlideDown (in ruby:
+            longest_slide_down) that takes a pyramid representation as
+            argument and returns its' longest 'slide down'. For example,</p>
 
-            <p>(c) This task is a lyrical version of the Problem 18 and/or Problem 67 on ProjectEuler.</p>  
+        <p>By the way...</p>
+
+        <p>My tests include some extraordinarily high pyramides so as you
+            can guess, brute-force method is a bad idea unless you have a
+            few centuries to waste. You must come up with something more
+            clever than that.</p>
+
+        <p>(c) This task is a lyrical version of the Problem 18 and/or Problem 67 on ProjectEuler.</p>
+
+
         <script>
-            
+
             ////////////////////////////////////////////////////////////////////
             // My solution
+            //
+            //                  3
+            //                 7 4
+            //                2 4 6
+            //               8 5 9 3
             ////////////////////////////////////////////////////////////////////
-            function solution(A) {
+            // This version was coded after seeing some of the more elegant
+            // solutions on codewars.  Makeing use of the reduce & map functions
+            // of the Array object.
+            ////////////////////////////////////////////////////////////////////
+            function longestSlideDown(pyramid) {
                 "use strict";
-            }
+
+                // Process the array from bottom to top, calling a callback
+                // function for each item of the array. Returns a new modified
+                // array.
+                var reducedResult = pyramid.reduceRight(function(previousRow, currentRow) {
+                    // For each element in the current 'row' array, set its
+                    // value to the sum of itself and the largest of its
+                    // adjacent child values
+                    return currentRow.map(function(currentColumnValue, index) {
+                        var adjacentLeft = previousRow[index];
+                        var adjacentRight = previousRow[index + 1];
+                        
+                        return currentColumnValue += Math.max(adjacentLeft, adjacentRight);
+                    });
+
+                });
+
+                // At this point, the top most element will be the sum of the
+                // greatest value path through the pyramid, so we return that
+                // element.
+                return reducedResult[0];
+
+            } // End function longestSlideDown()
+
+
+            ////////////////////////////////////////////////////////////////////
+            // This version was coded after my first version was failing on
+            // efficiency.  Uses a new approach where we work from the bottom up.
+            ////////////////////////////////////////////////////////////////////
+            function longestSlideDown2(pyramid) {
+                "use strict";
+                var leftAdjacent; 
+                var rightAdjacent; 
+
+                // If only one row supplied, then return its only element
+                if(pyramid.length === 1) {
+                    return pyramid[0][0];
+                }
+
+                // Start 2nd last row, and for each row, counting backwards...
+                for(var rowIndex = pyramid.length - 2; rowIndex >= 0; rowIndex--) {
+                    //  ...update each element in the row to be the sum of
+                    // itself and the largest adjacent child
+                    for(var columnIndex = 0; columnIndex < pyramid[rowIndex].length; columnIndex++) {
+                        leftAdjacent = pyramid[rowIndex + 1][columnIndex];
+                        rightAdjacent = pyramid[rowIndex +1][columnIndex + 1];
+
+                        pyramid[rowIndex][columnIndex] += Math.max(leftAdjacent, rightAdjacent);
+
+                    } // End for(each item in the current row)
+
+                } // End for(each row, counting backwards)
+
+                // At this point, the top most element will be the sum of the
+                // greatest value path through the pyramid, so we return that
+                // element.
+                return pyramid[0][0];
+
+            } // End function longestSlideDown()
+
+
+            ////////////////////////////////////////////////////////////////////
+            // This version was my first attempt.  Worked, but failed on
+            // efficiency.
+            ////////////////////////////////////////////////////////////////////
+            function longestSlideDown1(pyramid) {
+                "use strict";
+                var result = 0;
+
+                // Call recursive route finding function, initialising it to
+                // start at the top of the pyramid
+                result = getSum(pyramid, 0, 0);
+
+                return result;
+
+            } // End function longestSlideDownOld()
+
+            ////////////////////////////////////////////////////////////////////
+            // Recursive function to calculate the max value from a given
+            // position in the pyramid
+            ////////////////////////////////////////////////////////////////////
+            function getSumOld(pyramid, row, column) {
+                var result = 0;
+                var leftAdjacent;
+                var rightAdjacent;
+
+                // If we've reached the bottom of the pyramid, we don't go any
+                // deeper, so just return the value of the current element.
+                if(row >= pyramid.length - 1) {
+                    return pyramid[row][column];
+                }
+
+                // Safety check to clean any negative index values
+                if(column < 0) {
+                    leftAdjacent = 0;
+                }
+
+                // Else we set the index values of the two adjacent items in the
+                // row bellow our current row
+                else {
+                    leftAdjacent = column;
+                }
+
+                rightAdjacent = leftAdjacent + 1;
+
+                result = pyramid[row][column];
+
+                // Recursive call to our function, initialising it to start from
+                // the left adjacent item
+                var leftValue = getSum(pyramid, row + 1, leftAdjacent);
+
+                // Recursive call to our function, initialising it to start from
+                // the right adjacent item
+                var rightValue = getSum(pyramid, row + 1, rightAdjacent);
+
+                // Use the highest value as the return value
+                if(leftValue >= rightValue) {
+                    result += leftValue;
+                }
+
+                else {
+                    result += rightValue;
+                }
+
+                return result;
+
+            } // End function getSum()
+
+
 
             ////////////////////////////////////////////////////////////////////
             // Tests
             ////////////////////////////////////////////////////////////////////
-            console.log("No solution yet ");
+            //
+            //                  3
+            //                 7 4
+            //                2 4 6
+            //               8 5 9 3
+            ////////////////////////////////////////////////////////////////////
+            console.log("[[3], [7, 4], [2, 4, 6], [8, 5, 9, 3]] hopefully Returns 23: " + longestSlideDown([[3], [7, 4], [2, 4, 6], [8, 5, 9, 3]]));
+
+            ////////////////////////////////////////////////////////////////////
+            //
+            //                  3
+            //                 7 4
+            ////////////////////////////////////////////////////////////////////
+            console.log("[[3], [7, 4]] hopefully Returns 10: " + longestSlideDown([[3], [7, 4]]));
+
+            ////////////////////////////////////////////////////////////////////
+            //
+            //                   \3\
+            //                   1 \9\
+            //                  2 \4\ 1
+            //                8  5 \9\ 8
+            //              9  7  1 \6\ 4
+            ////////////////////////////////////////////////////////////////////
+            console.log("[[3], [1, 9], [2, 4, 1], [8, 5, 9, 8], [9, 7, 1, 6, 4]] hopefully Returns 31: " + longestSlideDown([[3], [1, 9], [2, 4, 1], [8, 5, 9, 8], [9, 7, 1, 6, 4]]));
+
+            console.log("[[75], \
+                          [95, 64], \
+                          [17, 47, 82], \
+                          [18, 35, 87, 10], \
+                          [20,  4, 82, 47, 65], \
+                          [19,  1, 23, 75,  3, 34], \
+                          [88,  2, 77, 73,  7, 63, 67], \
+                          [99, 65,  4, 28,  6, 16, 70, 92], \
+                          [41, 41, 26, 56, 83, 40, 80, 70, 33], \
+                          [41, 48, 72, 33, 47, 32, 37, 16, 94, 29], \
+                          [53, 71, 44, 65, 25, 43, 91, 52, 97, 51, 14], \
+                          [70, 11, 33, 28, 77, 73, 17, 78, 39, 68, 17, 57], \
+                          [91, 71, 52, 38, 17, 14, 91, 43, 58, 50, 27, 29, 48], \
+                          [63, 66,  4, 68, 89, 53, 67, 30, 73, 16, 69, 87, 40, 31], \
+                          [ 4, 62, 98, 27, 23,  9, 70, 98, 73, 93, 38, 53, 60,  4, 23]] hopefully return 1074: " + longestSlideDown([[75],
+                          [95, 64],
+                          [17, 47, 82],
+                          [18, 35, 87, 10],
+                          [20,  4, 82, 47, 65],
+                          [19,  1, 23, 75,  3, 34],
+                          [88,  2, 77, 73,  7, 63, 67],
+                          [99, 65,  4, 28,  6, 16, 70, 92],
+                          [41, 41, 26, 56, 83, 40, 80, 70, 33],
+                          [41, 48, 72, 33, 47, 32, 37, 16, 94, 29],
+                          [53, 71, 44, 65, 25, 43, 91, 52, 97, 51, 14],
+                          [70, 11, 33, 28, 77, 73, 17, 78, 39, 68, 17, 57],
+                          [91, 71, 52, 38, 17, 14, 91, 43, 58, 50, 27, 29, 48],
+                          [63, 66,  4, 68, 89, 53, 67, 30, 73, 16, 69, 87, 40, 31],
+                          [ 4, 62, 98, 27, 23,  9, 70, 98, 73, 93, 38, 53, 60,  4, 23]]));
+
+            console.log("[[75], [1, 10]] hopefully return 85: " + longestSlideDown([[75], [1, 10]]));
+        
+        
+            console.log("[[5]] hopefully return 5: " + longestSlideDown([[5]]));
+
+        
         </script>
+
   
     </body>
 </html>
