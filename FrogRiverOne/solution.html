@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Frog river one</title>
+    </head>
+    
+    <body>
+  
+        <h2>Frog river one (See console)</h2>
+            <h3 style="color:red">FAIL, not managed to solve this yet!!!</h3>
+
+            <p>Cotility tests fail, but I can't fathom which test case they are using.</p>
+
+
+
+
+         <script>
+            
+            ////////////////////////////////////////////////////////////////////
+            // My solution
+            ////////////////////////////////////////////////////////////////////
+            function solution(X, A) {
+                var result = -1;
+
+                // Get a filtered version of the array (only containing items
+                // that are in our range) and convert the items to objects
+                // preserving the time each value is encountered
+                A = A.map(function(currentValue, index, myArray) {
+                    if (currentValue <= X) {
+
+                        return {"index": index, "value": currentValue};
+                    }
+                });
+
+                // Sort the resulting array by value (primary) and index (secondary)
+                A.sort(function(a, b) {
+                    // Already in order or equal
+                    if(a.value <= b.value) {
+                        // check index is also in order
+                        if(a.index <= b.index) {
+                            return -1
+                        }
+
+                        // Else swap
+                        else {
+                            return 1
+                        }
+                    }
+
+                    else {
+                        return 1;
+                    }
+                });
+
+                // Remove any duplicate values from the sorted array (leaving
+                // the first (soonest) value in place)
+                A = A.filter(function(currentValue, index, myArray) {
+                    // Don't process first item as it won't have any previous to
+                    // compare with
+                    if(index > 0) {
+                        // As long as the current value is NOT the same as the
+                        // previous, we return it
+                        if(currentValue.value !== myArray[index -1].value) {
+                            return true;
+                        }
+
+                        else{
+                            return false;
+                        }
+                    }
+                    else {
+                        return true;
+                    }
+                });
+
+                // If we have enough jumps to meet our needs, then find the
+                // index/time value of the latest item.
+                if(A.length >= X) {
+                    result = A.reduceRight(function(previousValue, currentValue, index, myArray) {
+                        var max = Math.max(previousValue, currentValue.index)
+
+                        return max;
+
+                    }, 0);
+
+                }
+
+                return result;
+            }
+
+            ////////////////////////////////////////////////////////////////////
+            // Tests
+            ////////////////////////////////////////////////////////////////////
+            console.log("2, [2, 2, 2, 2, 2] should return '-1'. Returns:  " + solution(2, [2, 2, 2, 2, 2]));
+            console.log("5, [1, 3, 1, 4, 2, 3, 5, 4] should return '6'. Returns:  " + solution(5, [1, 3, 1, 4, 2, 3, 5, 4]));
+            console.log("1, [1] should return '0'. Returns:  " + solution(1, [1]));
+            console.log("1, [1,1,1,1,1,1,1,1,1,1] should return '0'. Returns:  " + solution(1,[1,1,1,1,1,1,1,1,1,1]));
+            console.log("3, [1, 3, 1, 3, 2, 1, 3] should return '4'. Returns:  " + solution(3, [1, 3, 1, 3, 2, 1, 3]));
+
+        </script>
+  
+    </body>
+</html>

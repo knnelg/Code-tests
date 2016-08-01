@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Dave Rolfe version of Frog river one</title>
+    </head>
+    
+    <body>
+  
+        <h2>Dave Rolfe version of Frog river one (See console)</h2>
+
+
+
+        <script>
+            ////////////////////////////////////////////////////////////////////
+            // Dave Rolfe solution
+            ////////////////////////////////////////////////////////////////////
+            function solution(X, A) {
+                // define array for check
+                var leaf = new Array(X);
+
+                var count = 0;
+
+                for(var i = 0; i < X; i++) {
+                    leaf[i] = false;
+                }
+
+                for(var i = 0; i < A.length; i++)
+                {
+                    var index = A[i];
+
+                    if(leaf[index] != true)
+                    {
+                        leaf[index] = true;
+
+                        count++;
+
+                        if(count == X) {
+                            return i;
+                        }
+                    }
+                }
+
+                return -1;
+            }
+
+
+
+            ////////////////////////////////////////////////////////////////////
+            // Tests
+            ////////////////////////////////////////////////////////////////////
+            console.log("2, [2, 2, 2, 2, 2] should return '-1'. Returns:  " + solution(2, [2, 2, 2, 2, 2]));
+            console.log("5, [1, 3, 1, 4, 2, 3, 5, 4] should return '6'. Returns:  " + solution(5, [1, 3, 1, 4, 2, 3, 5, 4]));
+            console.log("1, [1] should return '0'. Returns:  " + solution(1, [1]));
+            console.log("1, [1,1,1,1,1,1,1,1,1,1] should return '0'. Returns:  " + solution(1,[1,1,1,1,1,1,1,1,1,1]));
+            console.log("3, [1, 3, 1, 3, 2, 1, 3] should return '4'. Returns:  " + solution(3, [1, 3, 1, 3, 2, 1, 3]));
+
+        </script>
+  
+    </body>
+</html>
