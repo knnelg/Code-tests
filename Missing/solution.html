@@ -8,7 +8,9 @@
     <body>
   
         <h2>Missing (See console)</h2>
-            <p>A zero-indexed array A consisting of N different integers is given. The array contains integers in the range [1..(N + 1)], which means that exactly one element is missing.</p>
+            <p>A zero-indexed array A consisting of N different integers is
+                given. The array contains integers in the range [1..(N + 1)],
+                which means that exactly one element is missing.</p>
 
             <p>Your goal is to find that missing element.</p>
 
@@ -50,9 +52,9 @@
             function solution(A) {
                 var result = -1;
 
-                // Sorty the array (need to supply a sort function, otherwise 
-                // array would convert all elements to strings before comparis 
-                //on.  This is NOT the same as number comparison)
+                // Sort the array (need to supply a sort function, otherwise 
+                // array would convert all elements to strings before
+                // comparison.  This is NOT the same as number comparison)
                 A.sort(function(a, b) {
                     return a - b;
                 });
