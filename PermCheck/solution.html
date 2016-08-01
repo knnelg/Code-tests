@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<p>
+  <head>
+    <meta charset="UTF-8">
+    <title>Permutation</title>
+    </head>
+
+
+    <body>
+        <h2>Permutation (See console)</h2>
+
+            <p>A non-empty zero-indexed array A consisting of N integers is given.
+
+                A permutation is a sequence containing each element from 1 to N once, and only once.
+
+                For example, array A such that:
+                A[0] = 4
+                A[1] = 1
+                A[2] = 3
+                A[3] = 2
+
+                is a permutation, but array A such that:
+                A[0] = 4
+                A[1] = 1
+                A[2] = 3
+
+                is not a permutation, because value 2 is missing.
+
+                The goal is to check whether array A is a permutation.
+
+                Write a function:
+
+                function solution(A);
+
+                that, given a zero-indexed array A, returns 1 if array A is a permutation and 0 if it is not.
+
+                For example, given array A such that:
+                A[0] = 4
+                A[1] = 1
+                A[2] = 3
+                A[3] = 2
+
+                the function should return 1.
+
+                Given array A such that:
+                A[0] = 4
+                A[1] = 1
+                A[2] = 3
+
+                the function should return 0.
+
+                Assume that:
+
+                N is an integer within the range [1..100,000];
+                each element of array A is an integer within the range [1..1,000,000,000].
+
+                Complexity:
+
+                expected worst-case time complexity is O(N);
+                expected worst-case space complexity is O(N), beyond input storage (not counting the storage required for input arguments).
+
+                Elements of input arrays can be modified.
+            </p>
+
+
+         <script>
+            
+            ////////////////////////////////////////////////////////////////////
+            // My solution
+            ////////////////////////////////////////////////////////////////////
+            function solution(A) {
+                // Sort the array using custom sort function to avoid string
+                // comparisons
+                A.sort(function(a, b) {
+                    return a - b;
+                });
+
+                // Although the question is vague, it seems the sequence MUST
+                // start with '1' (judging by the Codility test cases), so we
+                // go through the array looking for any entry where the value
+                // does NOT match the (index + 1)
+                // I.e. will return true if we find an anomaly.
+                var result = A.some(function(currentValue, index, myArray) {
+                    // We assume the permutation has to start from 1
+                    return currentValue !== (index + 1);
+                });
+
+                // Negate the result and convert it to an int for returning.
+                return 0 + !result;
+            }
+
+
+
+
+
+
+            ////////////////////////////////////////////////////////////////////
+            // Tests
+            ////////////////////////////////////////////////////////////////////
+            console.log("[4, 1, 3, 2] should return '1'. Returns:  " + solution([4, 1, 3, 2]));
+            console.log("[4, 1, 2] should return '0' (missing number). Returns:  " + solution([4, 1, 2]));
+            console.log("[2] should return '0' (must start from '1'). Returns:  " + solution([2]));
+            console.log("[10, 11, 12] should return '0' (must start from '1'). Returns:  " + solution([10, 11, 12]));
+            console.log("[1] should return '1'. Returns:  " + solution([1]));
+            console.log("[0] should return '0' (must start from '1'). Returns:  " + solution([0]));
+
+        </script>
+  
+    </body>
+</html>
