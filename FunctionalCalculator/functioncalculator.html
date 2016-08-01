@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<!-- ======================================================================= -->
+<!-- =                                                                     = -->
+<!-- ======================================================================= -->
+<head>
+    <meta charset="UTF-8">
+    <title>Function calculator</title>
+</head>
+
+<!-- ======================================================================= -->
+<!-- =                                                                     = -->
+<!-- ======================================================================= -->
+<body>
+
+<div>
+    <p>Function calculator test.  <b>See console for output</b>.</p>
+</div>
+
+
+<script>
+    ////////////////////////////////////////////////////////////////////////////
+    //  This time we want to write calculations using functions and get the
+    //  results. Let's have a look at some examples:
+    //
+    //  seven(times(five())); // must return 35
+    //  four(plus(nine())); // must return 13
+    //  eight(minus(three())); // must return 5
+    //  six(dividedBy(two())); // must return 3
+    //
+    //  Requirements:
+    //
+    //  - There must be a function for each number from 0 ("zero") to 9 ("nine")
+    //  - There must be a function for each of the following mathematical
+    //      operations: plus, minus, times, dividedBy (divided_by in Ruby)
+    //  - Each calculation consist of exactly one operation and two numbers
+    //  - The most outer function represents the left operand, the most inner
+    //      function represents the right operand
+    //
+    ////////////////////////////////////////////////////////////////////////////
+
+    ///////////////////////////////////////////////////
+    function zero(operator) {
+        if(arguments.length > 0) {
+            var result = operator(0);
+
+            return result;
+        }
+
+        else {
+            return 0;
+        }
+    }
+
+    ///////////////////////////////////////////////////
+    function one(operator) {
+        if(arguments.length > 0) {
+            var result = operator(1);
+
+            return result;
+        }
+
+        else {
+            return 1;
+        }
+    }
+
+    ///////////////////////////////////////////////////
+    function two(operator) {
+        if(arguments.length > 0) {
+            var result = operator(2);
+
+            return result;
+        }
+
+        else {
+            return 2;
+        }
+    }
+
+    ///////////////////////////////////////////////////
+    function three(operator) {
+        if(arguments.length > 0) {
+            var result = operator(3);
+
+            return result;
+        }
+
+        else {
+            return 3;
+        }
+    }
+
+    ///////////////////////////////////////////////////
+    function four(operator) {
+        if(arguments.length > 0) {
+            var result = operator(4);
+
+            return result;
+        }
+
+        else {
+            return 4;
+        }
+    }
+
+    /////////////////////////////////////////////////////
+    function five(operator) {
+        if(arguments.length > 0) {
+            var result = operator(5);
+
+            return result;
+        }
+
+        else {
+            return 5;
+        }
+    }
+
+    //////////////////////////////////////////////////
+    function six(operator) {
+        if(arguments.length > 0) {
+            var result = operator(6);
+
+            return result;
+        }
+
+        else {
+            return 6;
+        }
+    }
+
+    ////////////////////////////////////////////////////
+    function seven(operator) {
+        if(arguments.length > 0) {
+            var result = operator(7);
+
+            return result;
+        }
+
+        else {
+            return 7;
+        }
+    }
+
+    ///////////////////////////////////////////////////
+    function eight(operator) {
+        if(arguments.length > 0) {
+            var result = operator(8);
+
+            return result;
+        }
+
+        else {
+            return 8;
+        }
+    }
+
+    ///////////////////////////////////////////////////
+    function nine(operator) {
+        if(arguments.length > 0) {
+            var result = operator(9);
+
+            return result;
+        }
+
+        else {
+            return 9;
+        }
+    }
+
+    ///////////////////////////////////////////////////
+    function plus(param) {
+        return function(param2) {
+            return param + param2;
+        };
+
+    }
+
+    ///////////////////////////////////////////////////
+    function minus(param) {
+        return function(param2) {
+            return param2 - param;
+        };
+    }
+
+    ///////////////////////////////////////////////////////
+    function times(param) {
+        return function(param2) {
+            return param * param2;
+        };
+
+    }
+
+    ///////////////////////////////////////////////////////
+    function dividedBy(param) {
+        return function(param2) {
+            return param2 / param;
+        };
+
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    // Run some tests
+    ////////////////////////////////////////////////////////////////////////////
+    console.log("five(times(five())): " + five(times(five())));
+    console.log("seven(times(five())): " + seven(times(five())));
+    console.log("four(plus(nine())): " + four(plus(nine())));
+    console.log("eight(minus(three())): " + eight(minus(three())));
+    console.log("six(dividedBy(two())): " + six(dividedBy(two())));
+
+</script>
+
+
+
+</body>
+
+</html>

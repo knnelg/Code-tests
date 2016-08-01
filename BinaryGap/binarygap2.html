@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<!--============================================================================
+=
+=============================================================================-->
+<head>
+    <meta charset="UTF-8">
+    <title>Angular Playpen</title>
+</head>
+
+<!--============================================================================
+=
+=============================================================================-->
+<body>
+
+<div>
+    <p>Binary gap</p>
+
+</div>
+
+
+<!--
+    100010010000
+-->
+<script>
+    function test(N) {
+        var recording = false;
+        var currentGap = 0;
+        var largestGap = 0;
+
+        // convert to boolean
+        var booleanString = N.toString(2);
+console.log(booleanString);
+        // Step through each char in the string
+        for (var index = 0; index < booleanString.length; ++index) {
+            if (booleanString[index] === "1") {
+                // if we are recording, then this is the end of a gap, so if it's a new high, store it, then stop recording
+                if (recording) {
+                    if (currentGap > largestGap) {
+                        largestGap = currentGap;
+
+                        currentGap = 0;
+                    }
+                }
+
+                // start/stop recording
+                recording = true;
+            }
+
+            // else its a '0' so add it to the current gap
+            else {
+                currentGap++;
+            }
+        }
+
+        return largestGap;
+
+    }
+
+
+    console.log("72 returns: " + test(72));
+    console.log("2120 returns: " + test(2120));
+    console.log("2192 returns: " + test(2192));
+    console.log("1162 returns: " + test(1162));
+
+
+</script>
+</body>
+
+</html>
