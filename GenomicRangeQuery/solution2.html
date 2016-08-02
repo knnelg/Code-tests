@@ -64,49 +64,33 @@
             // My solution
             ////////////////////////////////////////////////////////////////////
             function solution(S, P, Q) {
-                var slices = [];
                 var index = 0;
-                
-                for(index = 0; index < P.length; index++) {
-                    slices[index] = S.substring(P[index], Q[index] + 1);
-                }
-                
-                var impact = 10;
-                var results = [];
-                
-                for(index = 0; index < slices.length; index++) {
-                    
-                    // Reset min value recorder to a value higher than any valid
-                    // impact value
-                    impact = 10;
-                    
-                    for(var innerIndex = 0; innerIndex < slices[index].length; innerIndex++) {
-                        
-                        switch(slices[index][innerIndex]) {
-                            case 'A':
-                                impact = Math.min(impact, 1);
-                                
-                                break;
-                                
-                            case 'C':
-                                impact = Math.min(impact, 2);
-                                
-                                break;
 
-                            case 'G':
-                                impact = Math.min(impact, 3);
-                                
-                                break;
-                            case 'T':
-                                impact = Math.min(impact, 4);
-                                
-                                break;
-                        }
+                var results = [];
+
+                var map = Array.prototype.map;
+
+                var tS = map.call(S, function(currentValue) {
+                    switch(currentValue) {
+                        case 'A':
+                            return 1;
+                        case 'C':
+                            return 2;
+                        case 'G':
+                            return 3;
+                        case 'T':
+                            return 4;
                     }
-                    
-                    results[index] = impact;
+                });
+
+                for(index = 0; index < P.length; index++) {
+                    var slice = tS.slice(P[index], Q[index] + 1);
+
+                    results[index] = slice.reduce(function(previousValue, currentValue) {
+                        return Math.min(previousValue, currentValue);
+                    });
                 }
-                
+
                 return results;
             }
 
