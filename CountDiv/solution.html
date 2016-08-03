@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<p>
+  <head>
+    <meta charset="UTF-8">
+    <title>Counting Div</title>
+    </head>
+
+
+    <body>
+        <h2>Counting Div (See console)</h2>
+
+        <h3 style="color:red">Says it fails tests, but I don't agree.  I've emailed Codility for clarification</h3>
+
+        <p>Write a function:
+
+            function solution(A, B, K);
+            that, given three integers A, B and K, returns the number of integers within the range [A..B] that are divisible by K, i.e.:
+
+            { i : A ≤ i ≤ B, i mod K = 0 }
+            For example, for A = 6, B = 11 and K = 2, your function should return 3, because there are three numbers divisible by 2 within the range [6..11], namely 6, 8 and 10.
+
+            Assume that:
+
+            A and B are integers within the range [0..2,000,000,000];
+            K is an integer within the range [1..2,000,000,000];
+            A ≤ B.
+            Complexity:
+
+            expected worst-case time complexity is O(1);
+            expected worst-case space complexity is O(1).</p>
+
+        <script>
+            
+            ////////////////////////////////////////////////////////////////////
+            // My solution
+            ////////////////////////////////////////////////////////////////////
+            function solution(A, B, K) {
+                var result = 0;
+
+                for(var index = A; index <= B;) {
+                    // NOTE: the need to catch '0'  Apparently 0 is divisible by
+                    // ANY number
+                    if(((index >= K) && (index % K === 0)) || index === 0) {
+                        result++;
+                        index += K;
+                    }
+
+                    else {
+                        index++;
+                    }
+                }
+
+                return result;
+            }
+
+
+
+
+            ////////////////////////////////////////////////////////////////////
+            // Tests
+            ////////////////////////////////////////////////////////////////////
+            console.log("0, 0, 11 should return '1'. Returns:  " + solution(0, 0, 11));
+            console.log("0, 10, 3 should return '4'. Returns:  " + solution(0, 10, 3));
+            console.log("10, 30, 15 should return '2'. Returns:  " + solution(10, 30, 15));
+            console.log("1, 1, 11 should return '0'. Returns:  " + solution(1, 1, 11));
+            console.log("11, 11, 11 should return '1'. Returns:  " + solution(11, 11, 11));
+        </script>
+  
+    </body>
+</html>
