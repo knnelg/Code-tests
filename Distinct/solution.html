@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Distinct</title>
+    </head>
+    
+    <body>
+  
+        <h2>Distinct (See console)</h2>
+
+        <h3 style="color:green">Passed 100% <a href="">Link</a></h3>
+
+        <p>Write a function
+
+            function solution(A);
+            that, given a zero-indexed array A consisting of N integers, returns the number of distinct values in array A.
+
+            Assume that:
+
+            N is an integer within the range [0..100,000];
+            each element of array A is an integer within the range [−1,000,000..1,000,000].
+            For example, given array A consisting of six elements such that:
+
+            A[0] = 2    A[1] = 1    A[2] = 1
+            A[3] = 2    A[4] = 3    A[5] = 1
+            the function should return 3, because there are 3 distinct values appearing in array A, namely 1, 2 and 3.
+
+            Complexity:
+
+            expected worst-case time complexity is O(N*log(N));
+            expected worst-case space complexity is O(N), beyond input storage (not counting the storage required for input arguments).
+            Elements of input arrays can be modified.</p>
+
+
+            <script>
+            
+            ////////////////////////////////////////////////////////////////////
+            // My solution
+            ////////////////////////////////////////////////////////////////////
+            function solution(A) {
+                "use strict";
+
+                var strIndex;
+                var result = [];
+
+                for(var index = 0; index < A.length; index++) {
+
+                    var value = A[index];
+
+                    result[value] = true;
+
+                }
+
+                return Object.keys(result).length;
+            }
+
+
+            ////////////////////////////////////////////////////////////////////
+            // My old (inefficient) solution
+            ////////////////////////////////////////////////////////////////////
+            function solutionOld(A) {
+                "use strict";
+
+                // Sort the array into numerical order
+                A.sort((a, b) => a - b);
+
+                // Remove duplicates
+                A = A.filter(function(currentValue, index, theArray) {
+                    if(index === 0) {
+                        return true;
+                    }
+
+                    else if(currentValue === theArray[index - 1]) {
+                        return false;
+                    }
+
+                    else {
+                        return true;
+                    }
+
+                });
+
+                // return length (containing only unique elements)
+                return A.length;
+            }
+
+
+            ////////////////////////////////////////////////////////////////////
+            // Tests
+            ////////////////////////////////////////////////////////////////////
+            console.log("[4, 2, 2, 5, 1, 5, 8] should return '5'. Returns:  " + solution([4, 2, 2, 5, 1, 5, 8]));
+            console.log("[-2, 6, 2, 5, 1, 1, 1, 1] should return '5'. Returns:  " + solution([-2, 6, 2, 5, 1, 1, 1, 1]));
+            console.log("[-2, 6, 2, 5, 1, 1, 1, 0] should return '6'. Returns:  " + solution([-2, 6, 2, 5, 1, 1, 1, 0]));
+            console.log("[0, 0] should return '1'. Returns:  " + solution([0, 0]));
+
+        </script>
+  
+    </body>
+</html>
