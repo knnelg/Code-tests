@@ -1,0 +1,65 @@
+<html>
+	<head>
+		<script>
+			var E=new Array();
+			var L=new Array();
+			
+			E[0]="00:00"; L[0]="00:00";
+			E[1]="00:00"; L[1]="00:01";
+			E[2]="09:42"; L[2]="10:42";
+			E[3]="09:42"; L[3]="10:43";
+			E[4]="00:00"; L[4]="23:59";
+			E[5]="16:59"; L[5]="19:01";
+			
+			
+			
+			function test_function(E,L)
+			{
+				var cost = 0;
+				
+				// entering time
+				var eHr=parseInt(E.substr(0,2));
+				var eMin=parseInt(E.substr(3,2));
+				var eTime = (eHr*60) + eMin;
+				
+				// leaving time
+				var lHr=parseInt(L.substr(0,2));
+				var lMin=parseInt(L.substr(3,2));
+				var lTime = (lHr*60) + lMin;
+				
+				var totDiff = lTime - eTime;
+				var totHrs = Math.ceil(totDiff/60);
+				
+				cost = 2; // standard car park charge
+				
+				if(totHrs==0)
+				{
+					// assuming here zero hours gets no additional charge, though the question does state that leave time MUST be after entry time so you can never get zero hours
+				}
+				else if(totHrs==1)
+				{
+					// assuming here zero hours gets the 3 quid additional charge, though the question does state that leave time MUST be after entry time so you can never get zero hours
+					cost += 3;
+				}
+				else
+				{
+					cost = cost + 3 + (4*(totHrs-1));
+				}
+				// think you could do the same if statement calc with just cost = cost + (4*totHrs) - 1 
+				
+				
+				return cost;
+			}
+		</script>
+		
+	</head>
+	<body>
+		<h1>Test</h1>
+		<script>
+			for(var i=0; i<E.length; i++)
+			{
+				document.writeln("Output for :" + E[i] + "," + L[i] + " is " + test_function(E[i], L[i]) + "</br>");
+			}
+		</script>
+	</body>
+</html>

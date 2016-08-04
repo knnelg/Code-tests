@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Car park</title>
+    </head>
+    
+    <body>
+  
+        <h2>Car park (See console)</h2>
+
+        <!--<h3 style="color: #aaaa00;">100% Correct, 66% performance  <a href="">Link</a></h3>-->
+
+        <p style="white-space: pre;">Write a function that calculates the price
+            of your car parking.
+
+            Input is two parameters (strings), E and L (Entering time and
+            Leaving time). Fixed format of 'HH:MM'
+
+            The car park has an entry fee of £2.
+
+            The first hour is £3.
+
+            Any additional hours (or part hours) are £4 each.
+
+            So '09:43,10:43' would return 5 (£2 charge, and £3 for one hour).
+
+            '10:30,12:45' would return 13 (£2 charge, plus £3 for first hour
+            plus 2*4 for the next hours/part-hours).
+
+            You can assume entry and leave times are in the same day, and leave
+            time is after entry time.
+
+            Return cost of staying at car park.
+        </p>
+
+
+            <script>
+            
+            ////////////////////////////////////////////////////////////////////
+            // My solution
+            ////////////////////////////////////////////////////////////////////
+            function solution(E, L) {
+                "use strict";
+
+                // Fixed entry fee of £2
+                // First hour is £3
+                // Second & subsequent (part)hours are £4
+                // Assumption that E time is before L time
+                // Assumption that all times are in the same day
+                // Assumption that times are in the correct format ("HH:MM")
+                // Assumption that both times are supplied
+                try {
+                    var entryFee = 2;
+                    var cost = 0;
+
+                    var enterMinutes = (E.split(':')[0] * 60) + E.split(':')[1] * 1;
+                    var leaveMinutes = (L.split(':')[0] * 60) + L.split(':')[1] * 1;
+
+                    var stay = Math.ceil((leaveMinutes - enterMinutes) / 60);
+
+                    // As long as we have a non negative/zero stay, calculate the
+                    // charge
+                    if (stay > 0) {
+                        cost = ((stay * 4) - 1); // 1st hour is £1 cheaper
+                    }
+
+                    else {
+                        throw "Invalid stay (" + stay + ")";
+                    }
+                }
+
+                catch(e) {
+//                    console.log(e);
+                    return -1;
+                }
+
+                return cost + entryFee;
+            }
+
+
+
+            ////////////////////////////////////////////////////////////////////
+            // Tests
+            ////////////////////////////////////////////////////////////////////
+            console.log("'10:30', '10:31' should return £5. Returns:  " + solution('10:30', '10:31'));
+            console.log("'10:30', '11:30' should return £5. Returns:  " + solution('10:30', '11:30'));
+            console.log("'10:30', '11:31' should return £9. Returns:  " + solution('10:30', '11:31'));
+            console.log("'09:00', '11:30' should return £13. Returns:  " + solution('09:00', '11:30'));
+            console.log("'00:00', '23:59' should return £97. Returns:  " + solution('00:00', '23:59'));
+            console.log("'00:00' (Invalid) should return -1. Returns:  " + solution('00:00'));
+            console.log("'10:30', '10:30' (Invalid) should return -1. Returns:  " + solution('10:30', '10:30'));
+            console.log("'09:00', '08:30' (invalid) should return -1. Returns:  " + solution('09:00', '08:30'));
+
+        </script>
+  
+    </body>
+</html>

@@ -1,0 +1,18 @@
+Write a function that calculates the price of your car parking.
+
+Input is two parameters (strings), E and L (Entering time and Leaving time). Fixed format of 'HH:MM'
+
+The car park has an entry fee of £2.
+
+The first hour is £3.
+
+Any additional hours (or part hours) are £4 each.
+
+So '09:43,10:43' would return 5 (£2 charge, and £3 for one hour).
+
+
+'10:30,12:45' would return 13 (£2 charge, plus £3 for first hour plus 2*4 for the next hours/part-hours).
+
+You can assume entry and leave times are in the same day, and leave time is after entry time.
+
+Return cost of staying at car park.

@@ -1,0 +1,133 @@
+<html>
+	<head>
+		<script>
+			var test1 = "00:05:01:111-111-111-111;00:05:00:222-222-222-222;01:02:10:333-333-333-333;00:02:25:444-444-444-444;00:11:22:111-111-111-111";
+			var test2 = "00:05:01:111-111-111-111;00:05:00:222-222-222-222;00:02:10:333-333-333-333;00:02:25:444-444-444-444;00:11:22:111-111-111-111";
+			var test3 = "00:05:01:111-111-111-111;00:45:00:222-222-222-222;00:02:10:333-333-333-333;00:02:25:444-444-444-444;00:11:22:111-111-111-111";
+			var test4 = "00:05:01:222-111-111-111;00:05:00:333-111-111-111;00:04:22:111-111-111-111;00:05:00:444-111-111-111;00:05:00:999-111-111-111";
+			
+			
+			function test_function(A)
+			{
+				// make sure these arrays are declared inside the function otherwise won't get re-initialised when multiple test cases run against the function
+				var bill = {};
+				var duration = {};
+				
+				
+				var stringSplit = String.fromCharCode(10);
+				
+				stringSplit = ";"; // just for my test cases as I used ';' rather that ascii(10) as delimiter...
+				
+				var items = A.split(stringSplit);
+				
+				for(var i=0; i<items.length; i++)
+				{
+					// strip out the time
+					var hrs = parseInt(items[i].substr(0,2));
+					var mins = parseInt(items[i].substr(3,2));
+					var secs = parseInt(items[i].substr(6,2));
+					
+					// calculate into total seconds used
+					var totSecs = (hrs*60*60) + (mins*60) + secs;
+
+					// get phone number
+					var phone = items[i].substr(9,15);
+					
+					// add to associative array
+					addCallToBill(bill, duration, phone, totSecs); // don't forget for the arrays you're passing the pointer to it rather than value so no need to pass them back to calling function!
+					
+				}
+				
+				// work through the billing associative array and return total bill cost
+				return calculateBill(bill, duration);
+			}
+			
+			function addCallToBill(bill, duration, phone, totSecs)
+			{
+				// storing both total seconds used and the cost for that phone number separately in two associative arrays
+				if(phone in bill)
+				{
+					// already have phone number so just add on to the existing key/value
+					bill[phone] = bill[phone] + calcCost(totSecs);
+					duration[phone] = duration[phone] + totSecs;
+				}
+				else
+				{
+					// new phone number
+					bill[phone] = calcCost(totSecs);
+					duration[phone] = totSecs;
+				}
+			}
+
+			// work out the cost of a call based on the number of seconds
+			function calcCost(totSecs)
+			{
+				var cost = 0;
+
+				if(totSecs < 300)
+				{
+					// if less than 5 minutes (i.e. 300 seconds)
+					cost = totSecs * 3;
+				}
+				else
+				{
+					// not less than 5 minutes so round up to nearest minute
+					totMins = Math.ceil(totSecs/60);
+					cost = totMins * 150;
+				}
+				return cost;
+			}
+
+			// loop through billing array
+			function calculateBill(bill, duration)
+			{
+				var firstPhone = true;
+				var phone;
+				var maxPhone;
+				var maxBill = 0;
+				var cost = 0;
+				
+				// looping associative array
+				for (phone in bill)
+				{
+					cost = cost + bill[phone];
+					
+					// if first time through need to set the 'maximum' phone number to the first phone number
+					if(firstPhone)
+					{
+						maxPhone = phone;
+						maxBill = bill[phone];
+						firstPhone = false;
+					}
+					
+					// using duration of call here, rather than the total cost of the calls to that number - this might not be what question wants, might be on total cost for each number 
+					// so in that case you probably don't need the 'duration' array at all
+					if(duration[phone] > duration[maxPhone])
+					{
+						maxPhone = phone;
+						maxBill = bill[phone];
+					}
+				}
+
+				// take off the cost of the phone number with the longest duration of calls (which is not the same as the greatest cost as
+				// 4:59 costs 897c where as 5:00 costs only 750c (5 mins * 150c) for example
+				
+				cost = cost - maxBill;
+				
+				return cost;
+			}
+
+		</script>
+		
+	</head>
+	<body>
+		<h1>Test</h1>
+		<script>
+			document.writeln("Output:" + test_function(test1) + "</br>");
+			document.writeln("Output:" + test_function(test2) + "</br>");
+			document.writeln("Output:" + test_function(test3) + "</br>");
+			document.writeln("Output:" + test_function(test4) + "</br>");
+			//document.writeln("Output:" + test_function(test5) + "</br>");
+		</script>
+	</body>
+</html>
