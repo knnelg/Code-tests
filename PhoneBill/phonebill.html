@@ -107,7 +107,7 @@
         }
 
         ////////////////////////////////////////////////////////////////////////
-        // Calculat a call cost based on duration
+        // Calculate a call cost based on duration
         ////////////////////////////////////////////////////////////////////////
         function getCost(duration) {
 
@@ -124,6 +124,15 @@
             // above are rounded to the next full minute)
             var roundedMinutes = minutes;
 
+            
+            // BUG BUG BUG - WHAT IF HOURS WERE 1 AND MINUTES ONLY 3?
+            // BUG BUG BUG - WHAT IF HOURS WERE 1 AND MINUTES ONLY 3?
+            // BUG BUG BUG - WHAT IF HOURS WERE 1 AND MINUTES ONLY 3?
+            // BUG BUG BUG - WHAT IF HOURS WERE 1 AND MINUTES ONLY 3?
+            // BUG BUG BUG - WHAT IF HOURS WERE 1 AND MINUTES ONLY 3?
+            // BUG BUG BUG - WHAT IF HOURS WERE 1 AND MINUTES ONLY 3?
+            // BUG BUG BUG - WHAT IF HOURS WERE 1 AND MINUTES ONLY 3?
+            // BUG BUG BUG - WHAT IF HOURS WERE 1 AND MINUTES ONLY 3?
             if((minutes >= 5) && (seconds > 0)) {
                 roundedMinutes = minutes + 1;
             }
@@ -145,7 +154,12 @@
     ////////////////////////////////////////////////////////////////////////////
     // Run some tests
     ////////////////////////////////////////////////////////////////////////////
-    console.log("result for '00:04:01:333-444-555\n00:05:00:123-456-789\n00:05:01:333-444-555': " + test("00:04:01:333-444-555\n00:05:00:123-456-789\n00:05:01:333-444-555"));
+    console.log("'01:04:01:333-444-555\\n01:05:00:123-456-789\\n01:05:01:333-444-555': Should return 19500, Returns: " + test("01:04:01:333-444-555\n01:05:00:123-456-789\n01:05:01:333-444-555"));
+    console.log("'00:04:01:333-444-555\\n00:05:00:123-456-789\\n00:05:01:333-444-555': Should return 1473, Returns: " + test("00:04:01:333-444-555\n00:05:00:123-456-789\n00:05:01:333-444-555"));
+    console.log("'00:03:21:333-444-555\\n00:06:00:123-456-789\\n00:05:01:333-444-555': Should return 1503, Returns: " + test("00:03:21:333-444-555\n00:06:00:123-456-789\n00:05:01:333-444-555"));
+    console.log("'00:03:21:333-444-555': Should return 0, Returns: " + test("00:03:21:333-444-555"));
+    console.log("'23:59:59:333-444-555\\n23:59:59:333-444-555': Should return 216000, Returns: " + test("23:59:59:333-444-555\n23:59:59:333-444-555"));
+    console.log("'00:03:34:01912272838\\n23:59:59:333-444-555': Should return 642, Returns: " + test("00:03:34:01912272838\n23:59:59:333-444-555"));
 
 
 
