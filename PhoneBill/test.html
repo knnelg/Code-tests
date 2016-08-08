@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<!-- ======================================================================= -->
+<!-- =                                                                     = -->
+<!-- ======================================================================= -->
+<head>
+    <meta charset="UTF-8">
+    <title>Phone bill</title>
+</head>
+
+<!-- ======================================================================= -->
+<!-- =                                                                     = -->
+<!-- ======================================================================= -->
+<body>
+
+<div>
+    <p>Phone bill test.  <b>See console for output</b>.</p>
+</div>
+
+
+<script>
+    ////////////////////////////////////////////////////////////////////////////
+    //  Q2. 45 mins
+    //  You received a phone bill which is larger than you think so you write a
+    //  function to calculate what your bill would be.
+    //
+    //  The function should return (in cents) the value of your bill.
+    //
+    //  For every call under 5 minutes it is 3 cents per second.
+    //
+    //  For every call over 5 minutes it should be the rounded up minute * 150
+    //  cents.
+    //  So exactly 5 mins would be 750c, 5 mins and one second would be 6 * 150
+    //  = 900.
+    //
+    //  As a promotion the phone number on your bill with the longest duration
+    //  of calls would be free.
+    //  If two different numbers have the same cost then the value that is free
+    //  is the lowest phone number (i.e. 0191555555 is the free one as it beats
+    //  01917777777).
+    //
+    //  Input to function is a single string.
+    //  Each line is separated by a new line character (ascii 10).
+    //
+    //  Format "HH:MM:SS:nnn-nnn-nnn " and is fixed length (lengths won't
+    //  change). HH – hours, MM mins, SS seconds, nnn-nnn-nnn is the phone
+    //  number.
+    //
+    //  Return an integer  with the cost in cents of the phone bill.
+    //
+    //  Test data might be
+    //    "00:05:01:333-444-555\n00:05:00:123-456-789\n00:05:01:333-444-555"
+    //
+    //  which would return 750 as the 333-444-555 calls are longest duration and
+    //  thus free.
+    ////////////////////////////////////////////////////////////////////////////
+    function test(callLog) {
+        // return integer cost of bill (cents)
+        // Calls under 5 mins, 3 cents second
+        // Callss over 5 mins are 150 ber minute rounded up
+        // Longest duration call is free
+        // if two numbers have same longest duration, then lowest phone number wins
+        var calls = callLog.split('\n');
+
+        // Convert to objects
+        calls = calls.map(function(currentValue, index, theArray) {
+            var elements = currentValue.split(':');
+
+            var durationInSeconds = (elements[0] * 3600) + (elements[1] * 60) + (elements[2] * 1);
+            
+            var phoneNumber = elements[3].replace('/" "+-+/g', '');
+
+            var cost = 0;
+
+            if(durationInSeconds < 300) {
+                cost = durationInSeconds * 3; // 3 cents per second for calls under 5 mins
+            }
+
+            else {
+                cost = Math.ceil(durationInSeconds / 60) * 150; // 150 per rounded up minute
+            }
+
+            return {"duration": durationInSeconds, "phoneNumber":phoneNumber, "cost":cost};
+
+        });
+
+        var tcost = 0;
+        var maxCallLength = 0;
+        var maxCallLengthCost = 0;
+
+        for(var index = 0; index < calls.length; index++) {
+            if(calls[index].duration > maxCallLength) {
+                maxCallLengthCost = calls[index].cost;
+            }
+            
+            tcost += calls[index].cost;
+
+        }
+
+        tcost -= maxCallLengthCost;
+
+        return tcost;
+    }
+
+
+
+
+
+
+
+    ////////////////////////////////////////////////////////////////////////////
+    // Run some tests
+    ////////////////////////////////////////////////////////////////////////////
+    console.log("'01:04:01:333-444-555\\n01:05:00:123-456-789\\n01:05:01:333-444-555': Should return 19500, Returns: " + test("01:04:01:333-444-555\n01:05:00:123-456-789\n01:05:01:333-444-555"));
+    console.log("'00:04:01:333-444-555\\n00:05:00:123-456-789\\n00:05:01:333-444-555': Should return 1473, Returns: " + test("00:04:01:333-444-555\n00:05:00:123-456-789\n00:05:01:333-444-555"));
+    console.log("'00:03:21:333-444-555\\n00:06:00:123-456-789\\n00:05:01:333-444-555': Should return 1503, Returns: " + test("00:03:21:333-444-555\n00:06:00:123-456-789\n00:05:01:333-444-555"));
+    console.log("'00:03:21:333-444-555': Should return 0, Returns: " + test("00:03:21:333-444-555"));
+    console.log("'23:59:59:333-444-555\\n23:59:59:333-444-555': Should return 216000, Returns: " + test("23:59:59:333-444-555\n23:59:59:333-444-555"));
+    console.log("'00:03:34:01912272838\\n23:59:59:333-444-555': Should return 642, Returns: " + test("00:03:34:01912272838\n23:59:59:333-444-555"));
+
+
+
+</script>
+
+
+
+</body>
+
+</html>
