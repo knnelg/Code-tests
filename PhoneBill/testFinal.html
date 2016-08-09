@@ -64,13 +64,14 @@
 
         var calls = callLog.split('\n');
 
-        // Convert to objects
-        calls = calls.map(function(currentValue, index, theArray) {
-            var elements = currentValue.split(':');
+        var bill = [];
 
-            var durationInSeconds = (elements[0] * 3600) + (elements[1] * 60) + (elements[2] * 1);
-            
-            var phoneNumber = elements[3].replace(/(\s+|-+)/g, '');
+        for(var index = 0; index < calls.length; index++) {
+            var call = calls[index].split(":");
+
+            var phoneNumber = call[3].replace(/(\s+|-+)/g, '');
+
+            var durationInSeconds = (call[0] * 3600) + (call[1] * 60) + (call[2] * 1);
 
             var cost = 0;
 
@@ -82,17 +83,26 @@
                 cost = Math.ceil(durationInSeconds / 60) * 150; // 150 per rounded up minute
             }
 
-            return {"duration": durationInSeconds, "phoneNumber":phoneNumber, "cost":cost};
+            if(bill[phoneNumber] === undefined) {
+                bill[phoneNumber] = {"durationInSeconds":durationInSeconds, "cost":cost};
+            }
 
-        });
+            else {
+                bill[phoneNumber].durationInSeconds += durationInSeconds;
+                bill[phoneNumber].cost += cost;
+            }
+        }
 
         var tcost = 0;
         var maxCallLength = 0;
+        var lowestPhoneNumber = Number.MAX_SAFE_INTEGER;
         var maxCallLengthCost = 0;
 
-        for(var index = 0; index < calls.length; index++) {
-            if(calls[index].duration > maxCallLength) {
-                maxCallLengthCost = calls[index].cost;
+        for(index = 0; index < bill.length; index++) {
+            if(bill[index].durationInSeconds > maxCallLength) {
+                maxCallLength = bill[index].cost;
+
+
             }
             
             tcost += calls[index].cost;
