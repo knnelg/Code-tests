@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<!-- ======================================================================= -->
+<!-- =                                                                     = -->
+<!-- ======================================================================= -->
+<head>
+    <meta charset="UTF-8">
+    <title>Map example</title>
+</head>
+
+<!-- ======================================================================= -->
+<!-- =                                                                     = -->
+<!-- ======================================================================= -->
+<body>
+
+<div>
+    <p>Map example  <b>See console for output</b>.</p>
+
+</div>
+
+
+<script>
+    function test(callLog) {
+        "use strict";
+        // return integer cost of bill (cents)
+        // Calls under 5 mins, 3 cents per second
+        // Calls over 5 mins are 150 per minute rounded up
+        // Phone number with the Longest total duration of calls is free
+        // If two numbers have same longest duration, then lowest phone number wins
+        var totalCost = 0;
+        var maxDuration = 0;
+        var freeCost = 0;
+        var lowestPhoneNumber = Number.MAX_SAFE_INTEGER;
+        var callsMap = new Map();
+
+        // Split the input into records
+        var calls = callLog.split("\n");
+
+        // Go through each record and buid a call object to be added to a map of
+        // phone numbers and their values
+        for(let index = 0; index < calls.length; index++) {
+            let callDetails = calls[index].split(',');
+
+            // Strip any white space or '-' from the number
+            let phoneNumber = callDetails[1].replace(/(\s+|-+)/g, '');
+
+            // Work out the actual call duration in seconds
+            let timeElements = callDetails[0].split(':');
+
+            let durationInSeconds = (timeElements[0] * 3600) + (timeElements[1] * 60) + (timeElements[2] * 1);
+
+            // Calculate the call cost based on duration
+            let cost = 0;
+
+            // 3 cents per second for calls under 5 minutes
+            if(durationInSeconds < 300) {
+                cost = durationInSeconds * 3;
+            }
+
+            // 150 cents for each minute (or part minute) after we reach 5 mins
+            else {
+                cost = Math.ceil(durationInSeconds / 60) * 150;
+            }
+
+            // If we already have this phone number in the map, then incorporate
+            // the new details into the current values
+            if(callsMap.has(phoneNumber)) {
+                let detail = callsMap.get(phoneNumber);
+
+                detail.durationInSeconds += durationInSeconds;
+                detail.cost += cost;
+
+                // As we are updating an object reference, no need to store it back into the Map
+
+            }
+
+            // Else, no details for this phone number in the map, so add it
+            else {
+                callsMap.set(phoneNumber,
+                    {
+                        "durationInSeconds":durationInSeconds,
+                        "cost":cost,
+                        "phoneNumber":phoneNumber
+                    }
+                );
+            }
+
+        } // End for(each call record)
+
+        // Total the costs.
+        for(var [key, value] of callsMap)
+        {
+            totalCost += value.cost;
+
+            if(value.durationInSeconds > maxDuration) {
+                maxDuration = value.durationInSeconds;
+                freeCost = value.cost;
+            }
+
+            else if(value.durationInSeconds === maxDuration) {
+                if(key < lowestPhoneNumber) {
+                    lowestPhoneNumber = key;
+                    freeCost = value.cost;
+                }
+            }
+        }
+
+        return totalCost - freeCost;
+
+    }
+
+
+
+
+
+
+    ////////////////////////////////////////////////////////////////////////////
+    // Run some tests
+    ////////////////////////////////////////////////////////////////////////////
+    console.log("00:05:01,111-111-111-111\n00:05:00,222-222-222-222\n01:02:10,333-333-333-333\n00:02:25,444-444-444-444\n00:11:22,111-111-111-111 Should return 3885, Returns: " + test("00:05:01,111-111-111-111\n00:05:00,222-222-222-222\n01:02:10,333-333-333-333\n00:02:25,444-444-444-444\n00:11:22,111-111-111-111"));
+    console.log("00:05:01,111-111-111-111\n00:05:00,222-222-222-222\n00:02:10,333-333-333-333\n00:02:25,444-444-444-444\n00:11:22,111-111-111-111 Should return 1575, Returns: " + test("00:05:01,111-111-111-111\n00:05:00,222-222-222-222\n00:02:10,333-333-333-333\n00:02:25,444-444-444-444\n00:11:22,111-111-111-111"));
+    console.log("00:05:01,111-111-111-111\n00:45:00,222-222-222-222\n00:02:10,333-333-333-333\n00:02:25,444-444-444-444\n00:11:22,111-111-111-111 Should return 3525, Returns: " + test("00:05:01,111-111-111-111\n00:45:00,222-222-222-222\n00:02:10,333-333-333-333\n00:02:25,444-444-444-444\n00:11:22,111-111-111-111"));
+    console.log("00:05:01,222-111-111-111\n00:05:00,333-111-111-111\n00:04:22,111-111-111-111\n00:05:00,444-111-111-111\n00:05:00,999-111-111-111 Should return 3036, Returns: " + test("00:05:01,222-111-111-111\n00:05:00,333-111-111-111\n00:04:22,111-111-111-111\n00:05:00,444-111-111-111\n00:05:00,999-111-111-111"));
+    console.log("01:04:01,333-444 555\n01:05:00,123-456-789\n01:05:01,333-444-555 Should return 9750, Returns: " + test("01:04:01,333-444 555\n01:05:00,123-456-789\n01:05:01,333-444-555"));
+    console.log("00:04:01,333-444-555\n00:09:02,123-456-789\n00:05:01,333-444-555 Should return 1623, Returns: " + test("00:04:01,333-444-555\n00:09:02,123-456-789\n00:05:01,333-444-555"));
+    console.log("00:03:21,333-444-555\n00:06:00,123-456-789\n00:05:01,333-444-555 Should return 900, Returns: " + test("00:03:21,333-444-555\n00:06:00,123-456-789\n00:05:01,333-444-555"));
+    console.log("00:03:21,333-444-555 Should return 0, Returns: " + test("00:03:21,333-444-555"));
+    console.log("23:59:59,333-444-555\n23:59:59,333-444-555 Should return 0, Returns: " + test("23:59:59,333-444-555\n23:59:59,333-444-555"));
+    console.log("00:03:34,01912272838\n23:59:59,333-444-555 Should return 642, Returns: " + test("00:03:34,01912272838\n23:59:59,333-444-555"));
+
+
+
+</script>
+
+
+
+</body>
+
+</html>
